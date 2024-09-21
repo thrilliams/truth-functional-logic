@@ -43,7 +43,10 @@ export const entails = (
 	value: [
 		premises
 			.slice(0, -1)
-			.reduceRight((acc, value) => and(value, acc), premises.at(-1)!),
+			.reduceRight(
+				(acc, value) => and(value, acc),
+				premises[premises.length - 1]
+			),
 		conclusion,
 	],
 });
