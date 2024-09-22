@@ -52,7 +52,7 @@ const matchLetter = (input: string): MatchResult => {
 };
 
 const matchNegation = (input: string): MatchResult => {
-	const match = /^(?:-|~|not ) */.exec(input);
+	const match = /^(?:¬|-|~|not ) */.exec(input);
 	if (match === null) return [];
 
 	const remainder = input.slice(match[0].length);
@@ -133,19 +133,19 @@ const matchConnective =
 
 const matchConjunction = matchConnective(
 	SentenceType.Conjunction,
-	/\/\\|&| and /
+	/∧|\/\\|&| and /
 );
 
 const matchDisjunction = matchConnective(
 	SentenceType.Disjunction,
-	/\\\/|\|| or /
+	/∨|\\\/|\|| or /
 );
 
-const matchImplication = matchConnective(SentenceType.Implication, /->|=>|>/);
+const matchImplication = matchConnective(SentenceType.Implication, /→|->|=>|>/);
 
 const matchBiImplication = matchConnective(
 	SentenceType.BiImplication,
 	// <> is non-standard by the criteria of forall x: Calgary
 	// thankfully i like it so who cares
-	/<->|<=>|<>/
+	/↔|<->|<=>|<>/
 );
