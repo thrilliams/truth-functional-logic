@@ -1,9 +1,5 @@
-import {
-	includesLetter,
-	SentenceType,
-	type Letter,
-	type Sentence,
-} from "./Sentence";
+import { SentenceType, type Sentence } from "./Sentence";
+import { includesLetter, type Letter } from "./Letter";
 
 export function getLetters(sentence: Sentence): Letter[] {
 	if (sentence.type === SentenceType.Letter) return [sentence.value];

@@ -1,9 +1,5 @@
-import {
-	type Sentence,
-	type Letter,
-	SentenceType,
-	includesLetter,
-} from "./Sentence";
+import { type Sentence, SentenceType } from "./Sentence";
+import { type Letter, includesLetter } from "./Letter";
 
 export function resolve(sentence: Sentence, model: Letter[]): boolean {
 	if (sentence.type === SentenceType.Letter)

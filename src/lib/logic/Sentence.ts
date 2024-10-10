@@ -1,3 +1,5 @@
+import { Letter } from "./Letter";
+
 export enum SentenceType {
 	Letter,
 	Negation,
@@ -6,11 +8,6 @@ export enum SentenceType {
 	Implication,
 	BiImplication,
 }
-
-export type Letter = [string, number?];
-
-export const includesLetter = (letters: Letter[], letter: Letter) =>
-	letters.some((l: Letter) => letter[0] === l[0] && letter[1] === l[1]);
 
 export type Sentence = { type: SentenceType } & (
 	| { type: SentenceType.Letter; value: Letter }

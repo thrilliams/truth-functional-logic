@@ -1,8 +1,9 @@
 import { clsx } from "clsx";
 import { LetterComponent } from "./LetterComponent";
-import { getLetters, getModels } from "./lib/logic/getModels";
-import { resolve } from "./lib/logic/resolve";
-import { includesLetter, Sentence, SentenceType } from "./lib/logic/Sentence";
+import { getLetters, getModels } from "./getModels";
+import { resolve } from "./resolve";
+import { Sentence, SentenceType } from "./Sentence";
+import { includesLetter } from "./Letter";
 import { Fragment } from "react/jsx-runtime";
 
 function getColumnHeaders(sentence: Sentence): React.ReactNode[] {

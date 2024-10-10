@@ -1,4 +1,5 @@
-import { SentenceType, type Letter, type Sentence } from "./Sentence";
+import { SentenceType, type Sentence } from "./Sentence";
+import { type Letter } from "./Letter";
 
 export const letter = (char: string, sub?: number): Sentence => ({
 	type: SentenceType.Letter,
@@ -33,20 +34,4 @@ export const imp = (a: Sentence, b: Sentence): Sentence => ({
 export const biImp = (a: Sentence, b: Sentence): Sentence => ({
 	type: SentenceType.BiImplication,
 	value: [a, b],
-});
-
-export const entails = (
-	premises: Sentence[],
-	conclusion: Sentence
-): Sentence => ({
-	type: SentenceType.Implication,
-	value: [
-		premises
-			.slice(0, -1)
-			.reduceRight(
-				(acc, value) => and(value, acc),
-				premises[premises.length - 1]
-			),
-		conclusion,
-	],
 });

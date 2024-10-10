@@ -1,7 +1,8 @@
 import { getLetters, powerSet } from "./getModels";
 import { and, not, or, wrapLetter } from "./helpers";
 import { resolve } from "./resolve";
-import { includesLetter, type Sentence } from "./Sentence";
+import { type Sentence } from "./Sentence";
+import { includesLetter } from "./Letter";
 
 export function toCnfSyntactic(_sentence: Sentence): Sentence {
 	throw "not implemented!";
