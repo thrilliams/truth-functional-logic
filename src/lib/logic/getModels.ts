@@ -2,6 +2,8 @@ import { SentenceType, type Sentence } from "./Sentence";
 import { includesLetter, type Letter } from "./Letter";
 
 export function getLetters(sentence: Sentence): Letter[] {
+	if (sentence.type === SentenceType.Contradiction) return [];
+
 	if (sentence.type === SentenceType.Letter) return [sentence.value];
 	if (sentence.type === SentenceType.Negation)
 		return getLetters(sentence.value);

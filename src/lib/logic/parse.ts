@@ -1,4 +1,4 @@
-import { not, wrapLetter } from "./helpers";
+import { con, not, wrapLetter } from "./helpers";
 import { SentenceType, type Sentence } from "./Sentence";
 
 export function parse(string: string): Sentence | null {
@@ -35,7 +35,17 @@ const matchSentence = (input: string, topLevel = false): MatchResult => {
 	const letterResult = matchLetter(input);
 	if (resultValid(letterResult, topLevel)) return letterResult;
 
+	const contradictionResult = matchContradiction(input);
+	if (resultValid(contradictionResult, topLevel)) return contradictionResult;
+
 	return [];
+};
+
+const matchContradiction = (input: string): MatchResult => {
+	const match = /^!\?/.exec(input);
+	if (match === null) return [];
+
+	return [con(), input.slice(match[0].length)];
 };
 
 const matchLetter = (input: string): MatchResult => {

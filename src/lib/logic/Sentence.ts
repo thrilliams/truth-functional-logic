@@ -7,6 +7,8 @@ export enum SentenceType {
 	Disjunction,
 	Implication,
 	BiImplication,
+
+	Contradiction,
 }
 
 export type Sentence = { type: SentenceType } & (
@@ -16,4 +18,5 @@ export type Sentence = { type: SentenceType } & (
 	| { type: SentenceType.Disjunction; value: [Sentence, Sentence] }
 	| { type: SentenceType.Implication; value: [Sentence, Sentence] }
 	| { type: SentenceType.BiImplication; value: [Sentence, Sentence] }
+	| { type: SentenceType.Contradiction }
 );

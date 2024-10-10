@@ -2,6 +2,8 @@ import { type Sentence, SentenceType } from "./Sentence";
 import { type Letter, includesLetter } from "./Letter";
 
 export function resolve(sentence: Sentence, model: Letter[]): boolean {
+	if (sentence.type === SentenceType.Contradiction) return false;
+
 	if (sentence.type === SentenceType.Letter)
 		return includesLetter(model, sentence.value);
 

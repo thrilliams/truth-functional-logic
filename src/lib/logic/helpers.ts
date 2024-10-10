@@ -35,3 +35,7 @@ export const biImp = (a: Sentence, b: Sentence): Sentence => ({
 	type: SentenceType.BiImplication,
 	value: [a, b],
 });
+
+export const con = (): Sentence => ({
+	type: SentenceType.Contradiction,
+});

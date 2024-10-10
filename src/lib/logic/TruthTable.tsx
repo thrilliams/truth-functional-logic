@@ -7,6 +7,8 @@ import { includesLetter } from "./Letter";
 import { Fragment } from "react/jsx-runtime";
 
 function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
+	if (sentence.type === SentenceType.Contradiction) return ["⊥"];
+
 	if (sentence.type === SentenceType.Letter) {
 		return [<LetterComponent letter={sentence.value} />];
 	}
@@ -32,7 +34,11 @@ function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
 }
 
 function getArrayOfSentence(sentence: Sentence): Sentence[] {
-	if (sentence.type === SentenceType.Letter) return [sentence];
+	if (
+		sentence.type === SentenceType.Letter ||
+		sentence.type === SentenceType.Contradiction
+	)
+		return [sentence];
 	if (sentence.type === SentenceType.Negation)
 		return [sentence, ...getArrayOfSentence(sentence.value)];
 	return [
@@ -43,8 +49,12 @@ function getArrayOfSentence(sentence: Sentence): Sentence[] {
 }
 
 function getPrimaryConnectiveIndex(sentence: Sentence): number {
-	if (sentence.type === SentenceType.Letter) return 0;
-	if (sentence.type === SentenceType.Negation) return 0;
+	if (
+		sentence.type === SentenceType.Letter ||
+		sentence.type === SentenceType.Negation ||
+		sentence.type === SentenceType.Contradiction
+	)
+		return 0;
 	return getArrayOfSentence(sentence.value[0]).length;
 }
 

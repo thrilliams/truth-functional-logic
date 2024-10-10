@@ -1,6 +1,8 @@
 import { type Sentence, SentenceType } from "./Sentence";
 
 function stringifyRecursive(sentence: Sentence, p = true): string {
+	if (sentence.type === SentenceType.Contradiction) return "⊥";
+
 	if (sentence.type === SentenceType.Letter)
 		return (
 			sentence.value[0] +
