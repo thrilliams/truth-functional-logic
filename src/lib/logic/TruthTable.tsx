@@ -85,12 +85,14 @@ export function TruthTable({ sentence, onlyTrue = false }: TruthTableProps) {
 				)}rem)`,
 			}}
 		>
-			<div
-				className="border-r min-w-16"
-				style={{ gridColumn: `span ${letters.length}` }}
-			>
-				model
-			</div>
+			{letters.length > 0 && (
+				<div
+					className="border-r min-w-16"
+					style={{ gridColumn: `span ${letters.length}` }}
+				>
+					model
+				</div>
+			)}
 			<div
 				className="min-w-24"
 				style={{ gridColumn: `span ${headers.length}` }}
