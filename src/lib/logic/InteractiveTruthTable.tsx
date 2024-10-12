@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { parse } from "./parse";
+import { parseSentence } from "./parseSentence";
 import { TruthTable } from "./TruthTable";
 
 export function InteractiveTruthTable() {
 	const labelClasses = "block text-right text-xs italic";
 
 	const [input, setInput] = useState("");
-	let sentence = parse(input);
+	let sentence = parseSentence(input);
 
 	const [onlyTrue, setOnlyTrue] = useState(false);
 

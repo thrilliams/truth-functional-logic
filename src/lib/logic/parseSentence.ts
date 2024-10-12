@@ -1,7 +1,7 @@
 import { con, not, wrapLetter } from "./helpers";
 import { SentenceType, type Sentence } from "./Sentence";
 
-export function parse(string: string): Sentence | null {
+export function parseSentence(string: string): Sentence | null {
 	const [sentence, _remainder] = matchSentence(string, true);
 	return sentence || null;
 }
