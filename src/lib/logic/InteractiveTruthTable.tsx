@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { parseSentence } from "./parseSentence";
 import { TruthTable } from "./TruthTable";
+import { Mode } from "../../App";
+import { useLocalStorageState } from "../useLocalStorageState";
 
 export function InteractiveTruthTable() {
 	const labelClasses = "block text-right text-xs italic";
 
-	const [input, setInput] = useState("");
+	const [input, setInput] = useLocalStorageState(Mode.TruthTable, "");
 	let sentence = parseSentence(input);
 
 	const [onlyTrue, setOnlyTrue] = useState(false);
