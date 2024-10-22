@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { InteractiveProofWriter } from "./lib/proof/InteractiveProofWriter";
 import { InteractiveTruthTable } from "./lib/logic/InteractiveTruthTable";
+import { useLocalStorageState } from "./lib/useLocalStorageState";
 
 export enum Mode {
 	Proof = "proof",
@@ -12,7 +12,7 @@ function stringifyMode(mode: Mode) {
 }
 
 export function App() {
-	const [mode, setMode] = useState(Mode.Proof);
+	const [mode, setMode] = useLocalStorageState<Mode>("mode", Mode.Proof);
 	const nextMode = mode === Mode.Proof ? Mode.TruthTable : Mode.Proof;
 
 	return (

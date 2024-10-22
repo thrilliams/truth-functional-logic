@@ -1,15 +1,14 @@
 import { useState } from "react";
 
-export function useLocalStorageState(
+export function useLocalStorageState<T extends string>(
 	key: string,
-	defaultValue: string
-): [string, React.Dispatch<React.SetStateAction<string>>] {
+	defaultValue: T
+): [T, (newValue: T) => void] {
 	const [value, setValueRaw] = useState(
-		localStorage.getItem(key) || defaultValue
+		(localStorage.getItem(key) as T) || defaultValue
 	);
 
-	const setValue = (newValue: string | ((oldValue: string) => string)) => {
-		if (newValue instanceof Function) newValue = newValue(value);
+	const setValue = (newValue: T) => {
 		localStorage.setItem(key, newValue);
 		setValueRaw(newValue);
 	};
