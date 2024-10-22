@@ -48,6 +48,9 @@ export function referToSubproof(
 	precedingProof: Proof,
 	range: [number, number]
 ): [ProofLine, ProofLine] {
+	if (range[0] > precedingProof.length || range[1] > precedingProof.length)
+		throw [false, "the subproof range is not within the proof"];
+
 	const subproofStart = precedingProof[range[0]];
 	const subproofIndex = subproofStart.subproofIndex;
 
@@ -75,8 +78,11 @@ export function referToSubproof(
 		];
 
 	if (
-		!validateProofLine(subproofStart, precedingProof.slice(0, range[0])) ||
-		!validateProofLine(subproofEnd, precedingProof.slice(0, range[1]))
+		!validateProofLine(
+			subproofStart,
+			precedingProof.slice(0, range[0])
+		)[0] ||
+		!validateProofLine(subproofEnd, precedingProof.slice(0, range[1]))[0]
 	)
 		throw [false, "the referent subproof is not valid"];
 
