@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cm-focused {
+	outline: none !important;
+}
+
+.cm-line {
+	line-height: 25px;
+}
