@@ -7,15 +7,15 @@ const getNumbersFromMatch = (match: RegExpExecArray | null): number[] =>
 export function parseReason(reasonPart: string): Reason | null {
 	// structural rules
 
-	const premiseMatch = /^PR$/.exec(reasonPart);
+	const premiseMatch = /^PR$/i.exec(reasonPart);
 	if (premiseMatch !== null) return [ProofLineType.Premise];
 
-	const assumptionMatch = /^AS$/.exec(reasonPart);
+	const assumptionMatch = /^AS$/i.exec(reasonPart);
 	if (assumptionMatch !== null) return [ProofLineType.Assumption];
 
 	// atomic rules
 
-	const disjunctionIntroductionMatch = /^(?:∨|\\\/|\|)I *(\d+)$/.exec(
+	const disjunctionIntroductionMatch = /^(?:∨|\\\/|\|)I *(\d+)$/i.exec(
 		reasonPart
 	);
 	if (disjunctionIntroductionMatch !== null)
@@ -25,7 +25,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const disjunctionEliminationMatch =
-		/^(?:∨|\\\/|\|)E *(\d+) *, *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/.exec(
+		/^(?:∨|\\\/|\|)E *(\d+) *, *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/i.exec(
 			reasonPart
 		);
 	const disjunctionEliminationNumbers = getNumbersFromMatch(
@@ -46,7 +46,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const conjunctionIntroductionMatch =
-		/^(?:∧|\/\\|&)I *(\d+) *, *(\d+)$/.exec(reasonPart);
+		/^(?:∧|\/\\|&)I *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const conjunctionIntroductionNumbers = getNumbersFromMatch(
 		conjunctionIntroductionMatch
 	);
@@ -57,7 +57,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			conjunctionIntroductionNumbers[1],
 		];
 
-	const conjunctionEliminationMatch = /^(?:∧|\/\\|&)E *(\d+)$/.exec(
+	const conjunctionEliminationMatch = /^(?:∧|\/\\|&)E *(\d+)$/i.exec(
 		reasonPart
 	);
 	const conjunctionEliminationNumbers = getNumbersFromMatch(
@@ -70,7 +70,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const implicationIntroductionMatch =
-		/^(?:→|->|=>|>)I *(\d+) *- *(\d+)$/.exec(reasonPart);
+		/^(?:→|->|=>|>)I *(\d+) *- *(\d+)$/i.exec(reasonPart);
 	const implicationIntroductionNumbers = getNumbersFromMatch(
 		implicationIntroductionMatch
 	);
@@ -84,7 +84,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const implicationEliminationMatch =
-		/^(?:→|->|=>|>)E *(\d+) *, *(\d+)$/.exec(reasonPart);
+		/^(?:→|->|=>|>)E *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const implicationEliminationNumbers = getNumbersFromMatch(
 		implicationEliminationMatch
 	);
@@ -96,7 +96,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const biImplicationIntroductionMatch =
-		/^(?:↔|<->|<=>|<>)I *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/.exec(
+		/^(?:↔|<->|<=>|<>)I *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/i.exec(
 			reasonPart
 		);
 	const biImplicationIntroductionNumbers = getNumbersFromMatch(
@@ -116,7 +116,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const biImplicationEliminationMatch =
-		/^(?:↔|<->|<=>|<>)E *(\d+) *, *(\d+)$/.exec(reasonPart);
+		/^(?:↔|<->|<=>|<>)E *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const biImplicationEliminationNumbers = getNumbersFromMatch(
 		biImplicationEliminationMatch
 	);
@@ -127,7 +127,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			biImplicationEliminationNumbers[1],
 		];
 
-	const negationIntroductionMatch = /^(?:¬|-|~)I *(\d+) *- *(\d+)$/.exec(
+	const negationIntroductionMatch = /^(?:¬|-|~)I *(\d+) *- *(\d+)$/i.exec(
 		reasonPart
 	);
 	const negationIntroductionNumbers = getNumbersFromMatch(
@@ -139,7 +139,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			[negationIntroductionNumbers[0], negationIntroductionNumbers[1]],
 		];
 
-	const indirectProofMatch = /^IP *(\d+) *- *(\d+)$/.exec(reasonPart);
+	const indirectProofMatch = /^IP *(\d+) *- *(\d+)$/i.exec(reasonPart);
 	const indirectProofNumbers = getNumbersFromMatch(indirectProofMatch);
 	if (indirectProofMatch !== null)
 		return [
@@ -147,7 +147,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			[indirectProofNumbers[0], indirectProofNumbers[1]],
 		];
 
-	const negationEliminationMatch = /^(?:¬|-|~)E *(\d+) *, *(\d+)$/.exec(
+	const negationEliminationMatch = /^(?:¬|-|~)E *(\d+) *, *(\d+)$/i.exec(
 		reasonPart
 	);
 	const negationEliminationNumbers = getNumbersFromMatch(
@@ -160,7 +160,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			negationEliminationNumbers[1],
 		];
 
-	const explosionMatch = /^X *(\d+)$/.exec(reasonPart);
+	const explosionMatch = /^X *(\d+)$/i.exec(reasonPart);
 	if (explosionMatch !== null)
 		return [
 			ProofLineType.Explosion,
@@ -169,14 +169,14 @@ export function parseReason(reasonPart: string): Reason | null {
 
 	// derived rules
 
-	const reiterationMatch = /^R *(\d+)$/.exec(reasonPart);
+	const reiterationMatch = /^R *(\d+)$/i.exec(reasonPart);
 	if (reiterationMatch !== null)
 		return [
 			ProofLineType.Reiteration,
 			getNumbersFromMatch(reiterationMatch)[0],
 		];
 
-	const disjunctiveSyllogismMatch = /^DS *(\d+) *(\d+)$/.exec(reasonPart);
+	const disjunctiveSyllogismMatch = /^DS *(\d+) *(\d+)$/i.exec(reasonPart);
 	const disjunctiveSyllogismNumbers = getNumbersFromMatch(
 		disjunctiveSyllogismMatch
 	);
@@ -187,7 +187,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			disjunctiveSyllogismNumbers[1],
 		];
 
-	const modusTollensMatch = /^MT *(\d+) *(\d+)$/.exec(reasonPart);
+	const modusTollensMatch = /^MT *(\d+) *(\d+)$/i.exec(reasonPart);
 	const modusTollensNumbers = getNumbersFromMatch(modusTollensMatch);
 	if (modusTollensMatch !== null)
 		return [
@@ -196,7 +196,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			modusTollensNumbers[1],
 		];
 
-	const doubleNegationMatch = /^DNE *(\d+)$/.exec(reasonPart);
+	const doubleNegationMatch = /^DNE *(\d+)$/i.exec(reasonPart);
 	if (doubleNegationMatch !== null)
 		return [
 			ProofLineType.DoubleNegationElimination,
@@ -204,7 +204,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		];
 
 	const excludedMiddleMatch =
-		/^LEM *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/.exec(reasonPart);
+		/^LEM *(\d+) *- *(\d+) *, *(\d+) *- *(\d+)$/i.exec(reasonPart);
 	const excludedMiddleNumbers = getNumbersFromMatch(excludedMiddleMatch);
 	if (excludedMiddleMatch !== null)
 		return [
@@ -213,7 +213,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			[excludedMiddleNumbers[2], excludedMiddleNumbers[3]],
 		];
 
-	const deMorganMatch = /^DeM *(\d+)$/.exec(reasonPart);
+	const deMorganMatch = /^DeM *(\d+)$/i.exec(reasonPart);
 	if (deMorganMatch !== null)
 		return [ProofLineType.DeMorgan, getNumbersFromMatch(deMorganMatch)[0]];
 
