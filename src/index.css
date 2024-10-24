@@ -9,3 +9,8 @@
 .cm-line {
 	line-height: 25px;
 }
+
+.cm-gutterElement {
+	display: flex;
+	align-items: center;
+}
