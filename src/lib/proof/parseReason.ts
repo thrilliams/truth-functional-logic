@@ -176,7 +176,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			getNumbersFromMatch(reiterationMatch)[0],
 		];
 
-	const disjunctiveSyllogismMatch = /^DS *(\d+) *(\d+)$/i.exec(reasonPart);
+	const disjunctiveSyllogismMatch = /^DS *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const disjunctiveSyllogismNumbers = getNumbersFromMatch(
 		disjunctiveSyllogismMatch
 	);
@@ -187,7 +187,7 @@ export function parseReason(reasonPart: string): Reason | null {
 			disjunctiveSyllogismNumbers[1],
 		];
 
-	const modusTollensMatch = /^MT *(\d+) *(\d+)$/i.exec(reasonPart);
+	const modusTollensMatch = /^MT *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const modusTollensNumbers = getNumbersFromMatch(modusTollensMatch);
 	if (modusTollensMatch !== null)
 		return [
