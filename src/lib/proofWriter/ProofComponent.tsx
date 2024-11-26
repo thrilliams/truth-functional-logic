@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { findLastIndex } from "../proof/findLastIndex";
 import { IncompleteProof } from "../proof/parseProof";
-import { Proof, ProofLineType } from "../proof/Proof";
+import { Proof } from "../proof/Proof";
 import { arraysEqual } from "../proof/subproof";
 import { validateIncompleteProofLine } from "../proof/validateProofLine";
 import { stringify } from "../truthTable/stringify";
@@ -16,7 +16,7 @@ export function ProofComponent({ proof }: ProofComponentProps) {
 	const lines = [];
 	const indexOfLastPremise = findLastIndex(
 		proof,
-		(line) => line.reason[0] === ProofLineType.Premise
+		(line) => line.reason[0] === "premise"
 	);
 
 	for (let i = 0; i < proof.length; i++) {
@@ -25,8 +25,7 @@ export function ProofComponent({ proof }: ProofComponentProps) {
 		const proofDepth = line.subproofIndex.length + 1;
 
 		const underline =
-			i === indexOfLastPremise ||
-			line.reason[0] === ProofLineType.Assumption;
+			i === indexOfLastPremise || line.reason[0] === "assumption";
 
 		let [valid, validityMessage] = [
 			false,

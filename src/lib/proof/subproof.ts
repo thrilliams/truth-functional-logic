@@ -1,5 +1,5 @@
 import { findLastIndex } from "./findLastIndex";
-import { Proof, ProofLine, ProofLineType } from "./Proof";
+import { Proof, ProofLine } from "./Proof";
 import { validateProofLine } from "./validateProofLine";
 
 export function validateSubproofIndices(
@@ -71,7 +71,7 @@ export function referToSubproof(
 	if (!startsWith(line.subproofIndex, subproofIndex))
 		throw [false, "the referent subproof is in a closed subproof"];
 
-	if (subproofStart.reason[0] !== ProofLineType.Assumption)
+	if (subproofStart.reason[0] !== "assumption")
 		throw [
 			false,
 			"the referent subproof does not start with an assumption",

@@ -1,4 +1,4 @@
-import { Reason, ProofLineType } from "./Proof";
+import { Reason } from "./Proof";
 
 // assumes each number is a distinct group
 const getNumbersFromMatch = (match: RegExpExecArray | null): number[] =>
@@ -8,10 +8,10 @@ export function parseReason(reasonPart: string): Reason | null {
 	// structural rules
 
 	const premiseMatch = /^PR$/i.exec(reasonPart);
-	if (premiseMatch !== null) return [ProofLineType.Premise];
+	if (premiseMatch !== null) return ["premise"];
 
 	const assumptionMatch = /^AS$/i.exec(reasonPart);
-	if (assumptionMatch !== null) return [ProofLineType.Assumption];
+	if (assumptionMatch !== null) return ["assumption"];
 
 	// atomic rules
 
@@ -20,7 +20,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (disjunctionIntroductionMatch !== null)
 		return [
-			ProofLineType.DisjunctionIntroduction,
+			"disjunction_introduction",
 			getNumbersFromMatch(disjunctionIntroductionMatch)[0],
 		];
 
@@ -33,7 +33,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (disjunctionEliminationMatch !== null)
 		return [
-			ProofLineType.DisjunctionElimination,
+			"disjunction_elimination",
 			disjunctionEliminationNumbers[0],
 			[
 				disjunctionEliminationNumbers[1],
@@ -52,7 +52,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (conjunctionIntroductionMatch !== null)
 		return [
-			ProofLineType.ConjunctionIntroduction,
+			"conjunction_introduction",
 			conjunctionIntroductionNumbers[0],
 			conjunctionIntroductionNumbers[1],
 		];
@@ -64,10 +64,7 @@ export function parseReason(reasonPart: string): Reason | null {
 		conjunctionEliminationMatch
 	);
 	if (conjunctionEliminationMatch !== null)
-		return [
-			ProofLineType.ConjunctionElimination,
-			conjunctionEliminationNumbers[0],
-		];
+		return ["conjunction_elimination", conjunctionEliminationNumbers[0]];
 
 	const implicationIntroductionMatch =
 		/^(?:→|->|=>|>)I *(\d+) *- *(\d+)$/i.exec(reasonPart);
@@ -76,7 +73,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (implicationIntroductionMatch !== null)
 		return [
-			ProofLineType.ImplicationIntroduction,
+			"implication_introduction",
 			[
 				implicationIntroductionNumbers[0],
 				implicationIntroductionNumbers[1],
@@ -90,7 +87,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (implicationEliminationMatch !== null)
 		return [
-			ProofLineType.ImplicationElimination,
+			"implication_elimination",
 			implicationEliminationNumbers[0],
 			implicationEliminationNumbers[1],
 		];
@@ -104,7 +101,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (biImplicationIntroductionMatch !== null)
 		return [
-			ProofLineType.BiImplicationIntroduction,
+			"bi_implication_introduction",
 			[
 				biImplicationIntroductionNumbers[0],
 				biImplicationIntroductionNumbers[1],
@@ -122,7 +119,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (biImplicationEliminationMatch !== null)
 		return [
-			ProofLineType.BiImplicationElimination,
+			"bi_implication_elimination",
 			biImplicationEliminationNumbers[0],
 			biImplicationEliminationNumbers[1],
 		];
@@ -135,7 +132,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (negationIntroductionMatch !== null)
 		return [
-			ProofLineType.NegationIntroduction,
+			"negation_introduction",
 			[negationIntroductionNumbers[0], negationIntroductionNumbers[1]],
 		];
 
@@ -143,7 +140,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	const indirectProofNumbers = getNumbersFromMatch(indirectProofMatch);
 	if (indirectProofMatch !== null)
 		return [
-			ProofLineType.IndirectProof,
+			"indirect_proof",
 			[indirectProofNumbers[0], indirectProofNumbers[1]],
 		];
 
@@ -155,26 +152,20 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (negationEliminationMatch !== null)
 		return [
-			ProofLineType.NegationElimination,
+			"negation_elimination",
 			negationEliminationNumbers[0],
 			negationEliminationNumbers[1],
 		];
 
 	const explosionMatch = /^X *(\d+)$/i.exec(reasonPart);
 	if (explosionMatch !== null)
-		return [
-			ProofLineType.Explosion,
-			getNumbersFromMatch(explosionMatch)[0],
-		];
+		return ["explosion", getNumbersFromMatch(explosionMatch)[0]];
 
 	// derived rules
 
 	const reiterationMatch = /^R *(\d+)$/i.exec(reasonPart);
 	if (reiterationMatch !== null)
-		return [
-			ProofLineType.Reiteration,
-			getNumbersFromMatch(reiterationMatch)[0],
-		];
+		return ["reiteration", getNumbersFromMatch(reiterationMatch)[0]];
 
 	const disjunctiveSyllogismMatch = /^DS *(\d+) *, *(\d+)$/i.exec(reasonPart);
 	const disjunctiveSyllogismNumbers = getNumbersFromMatch(
@@ -182,7 +173,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	);
 	if (disjunctiveSyllogismMatch !== null)
 		return [
-			ProofLineType.DisjunctiveSyllogism,
+			"disjunctive_syllogism",
 			disjunctiveSyllogismNumbers[0],
 			disjunctiveSyllogismNumbers[1],
 		];
@@ -191,7 +182,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	const modusTollensNumbers = getNumbersFromMatch(modusTollensMatch);
 	if (modusTollensMatch !== null)
 		return [
-			ProofLineType.ModusTollens,
+			"modus_tollens",
 			modusTollensNumbers[0],
 			modusTollensNumbers[1],
 		];
@@ -199,7 +190,7 @@ export function parseReason(reasonPart: string): Reason | null {
 	const doubleNegationMatch = /^DNE *(\d+)$/i.exec(reasonPart);
 	if (doubleNegationMatch !== null)
 		return [
-			ProofLineType.DoubleNegationElimination,
+			"double_negation_elimination",
 			getNumbersFromMatch(doubleNegationMatch)[0],
 		];
 
@@ -208,14 +199,14 @@ export function parseReason(reasonPart: string): Reason | null {
 	const excludedMiddleNumbers = getNumbersFromMatch(excludedMiddleMatch);
 	if (excludedMiddleMatch !== null)
 		return [
-			ProofLineType.ExcludedMiddle,
+			"excluded_middle",
 			[excludedMiddleNumbers[0], excludedMiddleNumbers[1]],
 			[excludedMiddleNumbers[2], excludedMiddleNumbers[3]],
 		];
 
 	const deMorganMatch = /^DeM *(\d+)$/i.exec(reasonPart);
 	if (deMorganMatch !== null)
-		return [ProofLineType.DeMorgan, getNumbersFromMatch(deMorganMatch)[0]];
+		return ["de_morgan", getNumbersFromMatch(deMorganMatch)[0]];
 
 	return null;
 }

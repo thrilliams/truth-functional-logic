@@ -1,7 +1,7 @@
 import { parseSentence } from "../logic/parseSentence";
 // import { findLastIndex } from "./findLastIndex";
 import { parseReason } from "./parseReason";
-import { ProofLine, ProofLineType, Reason } from "./Proof";
+import { ProofLine, Reason } from "./Proof";
 
 type Stringable<T, K extends keyof T> = {
 	[P in keyof T]: P extends K ? T[P] | string : T[P];
@@ -47,7 +47,7 @@ export function parseProof(string: string): IncompleteProof {
 			indentationAmount = indentationMatch[0].length;
 		while (subproofIndexStack.length < indentationAmount)
 			subproofIndexStack.push(-1);
-		if (reason !== null && reason[0] === ProofLineType.Assumption)
+		if (reason !== null && reason[0] === "assumption")
 			subproofIndexStack[indentationAmount - 1] += 1;
 
 		incompleteProofLine.subproofIndex = subproofIndexStack.slice(

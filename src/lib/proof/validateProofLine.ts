@@ -2,7 +2,7 @@ import { equal } from "../logic/equal";
 import { imp } from "../logic/helpers";
 import { Sentence } from "../logic/Sentence";
 import { IncompleteProofLine } from "./parseProof";
-import { Proof, ProofLine, ProofLineType } from "./Proof";
+import { Proof, ProofLine } from "./Proof";
 import {
 	arraysEqual,
 	referToSubproof,
@@ -47,9 +47,9 @@ function validateProofLineWithErrors(
 
 	// structural rules
 
-	if (type === ProofLineType.Premise) {
+	if (type === "premise") {
 		const precedingNonPremise = precedingProof.find(
-			({ reason }) => reason[0] !== ProofLineType.Premise
+			({ reason }) => reason[0] !== "premise"
 		);
 		if (precedingNonPremise !== undefined)
 			throw [false, "premises must only appear at the start of a proof"];
@@ -57,7 +57,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.Assumption) {
+	if (type === "assumption") {
 		const precedingLineOfSameSubproof = precedingProof.find(
 			({ subproofIndex }) =>
 				arraysEqual(line.subproofIndex, subproofIndex)
@@ -70,7 +70,7 @@ function validateProofLineWithErrors(
 
 	// atomic rules
 
-	if (type === ProofLineType.DisjunctionIntroduction) {
+	if (type === "disjunction_introduction") {
 		if (line.sentence.type !== "disjunction")
 			throw [
 				false,
@@ -91,7 +91,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.DisjunctionElimination) {
+	if (type === "disjunction_elimination") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
 		if (referent.sentence.type !== "disjunction")
@@ -132,7 +132,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.ConjunctionIntroduction) {
+	if (type === "conjunction_introduction") {
 		if (line.sentence.type !== "conjunction")
 			throw [
 				false,
@@ -165,7 +165,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.ConjunctionElimination) {
+	if (type === "conjunction_elimination") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 		const referentSentence = referent.sentence;
 
@@ -184,7 +184,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.ImplicationIntroduction) {
+	if (type === "implication_introduction") {
 		if (line.sentence.type !== "implication")
 			throw [
 				false,
@@ -206,7 +206,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.ImplicationElimination) {
+	if (type === "implication_elimination") {
 		const firstReferent = referToLine(line, precedingProof, line.reason[1]);
 		const secondReferent = referToLine(
 			line,
@@ -262,7 +262,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.BiImplicationIntroduction) {
+	if (line.reason[0] === "bi_implication_introduction") {
 		if (line.sentence.type !== "bi_implication")
 			throw [
 				false,
@@ -303,7 +303,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.BiImplicationElimination) {
+	if (line.reason[0] === "bi_implication_elimination") {
 		const firstReferent = referToLine(line, precedingProof, line.reason[1]);
 		const secondReferent = referToLine(
 			line,
@@ -367,7 +367,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.NegationIntroduction) {
+	if (line.reason[0] === "negation_introduction") {
 		if (line.sentence.type !== "negation")
 			throw [
 				false,
@@ -395,7 +395,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.IndirectProof) {
+	if (line.reason[0] === "indirect_proof") {
 		const [start, end] = referToSubproof(
 			line,
 			precedingProof,
@@ -420,7 +420,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.NegationElimination) {
+	if (line.reason[0] === "negation_elimination") {
 		if (line.sentence.type !== "contradiction")
 			throw [
 				false,
@@ -476,7 +476,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.Explosion) {
+	if (line.reason[0] === "explosion") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 		if (referent.sentence.type !== "contradiction")
 			throw [false, "the referent is not a contradiction"];
@@ -486,7 +486,7 @@ function validateProofLineWithErrors(
 
 	// derived rules
 
-	if (type === ProofLineType.Reiteration) {
+	if (type === "reiteration") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
 		if (!equal(line.sentence, referent.sentence))
@@ -498,7 +498,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (type === ProofLineType.DisjunctiveSyllogism) {
+	if (type === "disjunctive_syllogism") {
 		const firstReferent = referToLine(line, precedingProof, line.reason[1]);
 		const secondReferent = referToLine(
 			line,
@@ -545,7 +545,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.ModusTollens) {
+	if (line.reason[0] === "modus_tollens") {
 		if (line.sentence.type !== "negation")
 			throw [
 				false,
@@ -590,7 +590,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.DoubleNegationElimination) {
+	if (line.reason[0] === "double_negation_elimination") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
 		if (
@@ -608,7 +608,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.ExcludedMiddle) {
+	if (line.reason[0] === "excluded_middle") {
 		const [firstStart, firstEnd] = referToSubproof(
 			line,
 			precedingProof,
@@ -648,7 +648,7 @@ function validateProofLineWithErrors(
 		return [true];
 	}
 
-	if (line.reason[0] === ProofLineType.DeMorgan) {
+	if (line.reason[0] === "de_morgan") {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
 		const failureReason =
