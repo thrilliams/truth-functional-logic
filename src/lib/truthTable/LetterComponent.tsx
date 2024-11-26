@@ -1,4 +1,4 @@
-import { Letter } from "./Letter";
+import { Letter } from "../logic/Letter";
 
 interface LetterComponentProps {
 	letter: Letter;

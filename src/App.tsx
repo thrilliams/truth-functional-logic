@@ -1,5 +1,5 @@
-import { InteractiveProofWriter } from "./lib/proof/InteractiveProofWriter";
-import { InteractiveTruthTable } from "./lib/logic/InteractiveTruthTable";
+import { InteractiveProofWriter } from "./lib/proofWriter/InteractiveProofWriter";
+import { InteractiveTruthTable } from "./lib/truthTable/InteractiveTruthTable";
 import { useLocalStorageState } from "./lib/useLocalStorageState";
 
 export enum Mode {

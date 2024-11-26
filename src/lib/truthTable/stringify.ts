@@ -1,4 +1,4 @@
-import { type Sentence, SentenceType } from "./Sentence";
+import { type Sentence, SentenceType } from "../logic/Sentence";
 
 function stringifyRecursive(sentence: Sentence, p = true): string {
 	if (sentence.type === SentenceType.Contradiction) return "⊥";

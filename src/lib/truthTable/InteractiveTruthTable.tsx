@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { parseSentence } from "./parseSentence";
+import { parseSentence } from "../logic/parseSentence";
 import { TruthTable } from "./TruthTable";
 import { Mode } from "../../App";
 import { useLocalStorageState } from "../useLocalStorageState";
@@ -15,7 +15,10 @@ export function InteractiveTruthTable() {
 	return (
 		<div className="col-start-2 w-full flex flex-col gap-4 mt-8 py-2 px-4 border rounded mx-auto">
 			<div>
-				<label className={labelClasses} htmlFor="tfl-input">
+				<label
+					className={labelClasses}
+					htmlFor="tfl-input"
+				>
 					tfl input
 				</label>
 				<input
@@ -32,7 +35,10 @@ export function InteractiveTruthTable() {
 				{input === "" ? (
 					<p className="text-center text-xs">awaiting input...</p>
 				) : sentence ? (
-					<TruthTable sentence={sentence} onlyTrue={onlyTrue} />
+					<TruthTable
+						sentence={sentence}
+						onlyTrue={onlyTrue}
+					/>
 				) : (
 					<pre className="text-center text-xs">
 						[ungrammatical input]

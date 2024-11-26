@@ -1,10 +1,10 @@
 import { clsx } from "clsx";
-import { LetterComponent } from "./LetterComponent";
-import { getLetters, getModels } from "./getModels";
-import { resolve } from "./resolve";
-import { Sentence, SentenceType } from "./Sentence";
-import { includesLetter } from "./Letter";
 import { Fragment } from "react/jsx-runtime";
+import { getLetters, getModels } from "../logic/getModels";
+import { includesLetter } from "../logic/Letter";
+import { LetterComponent } from "./LetterComponent";
+import { resolve } from "../logic/resolve";
+import { Sentence, SentenceType } from "../logic/Sentence";
 
 function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
 	if (sentence.type === SentenceType.Contradiction) return ["⊥"];

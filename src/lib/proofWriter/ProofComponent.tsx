@@ -1,12 +1,12 @@
-import { stringify } from "../logic/stringify";
-import { Proof, ProofLineType } from "./Proof";
-import { stringifyReason } from "./stringifyReason";
 import clsx from "clsx";
-import { validateIncompleteProofLine } from "./validateProofLine";
-import { findLastIndex } from "./findLastIndex";
-import { arraysEqual } from "./subproof";
+import { findLastIndex } from "../proof/findLastIndex";
+import { IncompleteProof } from "../proof/parseProof";
+import { Proof, ProofLineType } from "../proof/Proof";
+import { arraysEqual } from "../proof/subproof";
+import { validateIncompleteProofLine } from "../proof/validateProofLine";
+import { stringify } from "../truthTable/stringify";
 import { ProofLineComponent } from "./ProofLineComponent";
-import { IncompleteProof } from "./parseProof";
+import { stringifyReason } from "./stringifyReason";
 
 interface ProofComponentProps {
 	proof: IncompleteProof;

@@ -1,4 +1,4 @@
-import { ProofLineType, Reason } from "./Proof";
+import { ProofLineType, Reason } from "../proof/Proof";
 
 export function stringifyReason([type, ...references]: Reason): string {
 	const referenceString = references

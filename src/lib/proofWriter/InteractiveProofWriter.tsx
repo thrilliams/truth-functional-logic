@@ -1,10 +1,10 @@
-import { parseProof } from "./parseProof";
-import { ProofComponent } from "./ProofComponent";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import clsx from "clsx";
 import createTheme from "@uiw/codemirror-themes";
 import { Mode } from "../../App";
 import { useLocalStorageState } from "../useLocalStorageState";
+import { parseProof } from "../proof/parseProof";
+import { ProofComponent } from "./ProofComponent";
 
 const theme = createTheme({
 	theme: "light",
