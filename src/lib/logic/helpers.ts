@@ -1,41 +1,41 @@
-import { SentenceType, type Sentence } from "./Sentence";
+import { type Sentence } from "./Sentence";
 import { type Letter } from "./Letter";
 
 export const letter = (char: string, sub?: number): Sentence => ({
-	type: SentenceType.Letter,
+	type: "letter",
 	value: [char, sub],
 });
 
 export const wrapLetter = (letter: Letter): Sentence => ({
-	type: SentenceType.Letter,
+	type: "letter",
 	value: letter,
 });
 
 export const not = (a: Sentence): Sentence => ({
-	type: SentenceType.Negation,
+	type: "negation",
 	value: a,
 });
 
 export const and = (a: Sentence, b: Sentence): Sentence => ({
-	type: SentenceType.Conjunction,
+	type: "conjunction",
 	value: [a, b],
 });
 
 export const or = (a: Sentence, b: Sentence): Sentence => ({
-	type: SentenceType.Disjunction,
+	type: "disjunction",
 	value: [a, b],
 });
 
 export const imp = (a: Sentence, b: Sentence): Sentence => ({
-	type: SentenceType.Implication,
+	type: "implication",
 	value: [a, b],
 });
 
 export const biImp = (a: Sentence, b: Sentence): Sentence => ({
-	type: SentenceType.BiImplication,
+	type: "bi_implication",
 	value: [a, b],
 });
 
 export const con = (): Sentence => ({
-	type: SentenceType.Contradiction,
+	type: "contradiction",
 });

@@ -1,6 +1,6 @@
 import { equal } from "../logic/equal";
 import { imp } from "../logic/helpers";
-import { Sentence, SentenceType } from "../logic/Sentence";
+import { Sentence } from "../logic/Sentence";
 import { IncompleteProofLine } from "./parseProof";
 import { Proof, ProofLine, ProofLineType } from "./Proof";
 import {
@@ -71,7 +71,7 @@ function validateProofLineWithErrors(
 	// atomic rules
 
 	if (type === ProofLineType.DisjunctionIntroduction) {
-		if (line.sentence.type !== SentenceType.Disjunction)
+		if (line.sentence.type !== "disjunction")
 			throw [
 				false,
 				"disjunction introduction can only be used to create disjunction sentences",
@@ -94,7 +94,7 @@ function validateProofLineWithErrors(
 	if (type === ProofLineType.DisjunctionElimination) {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
-		if (referent.sentence.type !== SentenceType.Disjunction)
+		if (referent.sentence.type !== "disjunction")
 			throw [false, "the referent is not a disjunction statement"];
 
 		const [leftHandSentence, rightHandSentence] = referent.sentence.value;
@@ -133,7 +133,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (type === ProofLineType.ConjunctionIntroduction) {
-		if (line.sentence.type !== SentenceType.Conjunction)
+		if (line.sentence.type !== "conjunction")
 			throw [
 				false,
 				"conjunction introduction can only be used to create conjunction sentences",
@@ -169,7 +169,7 @@ function validateProofLineWithErrors(
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 		const referentSentence = referent.sentence;
 
-		if (referentSentence.type !== SentenceType.Conjunction)
+		if (referentSentence.type !== "conjunction")
 			throw [false, "the referent sentence is not a conjunction"];
 
 		const leftHandEqual = equal(line.sentence, referentSentence.value[0]);
@@ -185,7 +185,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (type === ProofLineType.ImplicationIntroduction) {
-		if (line.sentence.type !== SentenceType.Implication)
+		if (line.sentence.type !== "implication")
 			throw [
 				false,
 				"conditional introduction can only be used to create conditional sentences",
@@ -215,8 +215,8 @@ function validateProofLineWithErrors(
 		);
 
 		let firstImplication = true;
-		if (firstReferent.sentence.type !== SentenceType.Implication) {
-			if (secondReferent.sentence.type !== SentenceType.Implication)
+		if (firstReferent.sentence.type !== "implication") {
+			if (secondReferent.sentence.type !== "implication")
 				throw [false, "the referent sentence is not a conditional"];
 			firstImplication = false;
 		}
@@ -229,7 +229,7 @@ function validateProofLineWithErrors(
 			// little ts jank for a small amount of type safety later
 			const implicationLine: ProofLine & {
 				sentence: {
-					type: SentenceType.Implication;
+					type: "implication";
 					value: [Sentence, Sentence];
 				};
 			} = (firstImplication ? firstReferent : secondReferent) as any;
@@ -249,7 +249,7 @@ function validateProofLineWithErrors(
 			if (
 				tryAgain &&
 				failureReason !== null &&
-				eliminationLine.sentence.type === SentenceType.Implication
+				eliminationLine.sentence.type === "implication"
 			)
 				return validateImplicationElimination(!firstImplication, false);
 
@@ -263,7 +263,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (line.reason[0] === ProofLineType.BiImplicationIntroduction) {
-		if (line.sentence.type !== SentenceType.BiImplication)
+		if (line.sentence.type !== "bi_implication")
 			throw [
 				false,
 				"biconditional introduction can only be used to create biconditional sentences",
@@ -312,8 +312,8 @@ function validateProofLineWithErrors(
 		);
 
 		let firstBiImplication = true;
-		if (firstReferent.sentence.type !== SentenceType.BiImplication) {
-			if (secondReferent.sentence.type !== SentenceType.BiImplication)
+		if (firstReferent.sentence.type !== "bi_implication") {
+			if (secondReferent.sentence.type !== "bi_implication")
 				throw [false, "the referent sentence is not a conditional"];
 			firstBiImplication = false;
 		}
@@ -324,7 +324,7 @@ function validateProofLineWithErrors(
 		): string | null {
 			const biImplicationLine: ProofLine & {
 				sentence: {
-					type: SentenceType.BiImplication;
+					type: "bi_implication";
 					value: [Sentence, Sentence];
 				};
 			} = (firstBiImplication ? firstReferent : secondReferent) as any;
@@ -350,7 +350,7 @@ function validateProofLineWithErrors(
 			if (
 				tryAgain &&
 				failureReason !== null &&
-				eliminationLine.sentence.type === SentenceType.BiImplication
+				eliminationLine.sentence.type === "bi_implication"
 			)
 				return validateBiImplicationElimination(
 					!firstBiImplication,
@@ -368,7 +368,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (line.reason[0] === ProofLineType.NegationIntroduction) {
-		if (line.sentence.type !== SentenceType.Negation)
+		if (line.sentence.type !== "negation")
 			throw [
 				false,
 				"negation introduction can only be used to create negated sentences",
@@ -380,7 +380,7 @@ function validateProofLineWithErrors(
 			line.reason[1]
 		);
 
-		if (end.sentence.type !== SentenceType.Contradiction)
+		if (end.sentence.type !== "contradiction")
 			throw [
 				false,
 				"the referent subproof does not demonstrate a contradiction",
@@ -402,10 +402,10 @@ function validateProofLineWithErrors(
 			line.reason[1]
 		);
 
-		if (start.sentence.type !== SentenceType.Negation)
+		if (start.sentence.type !== "negation")
 			throw [false, "the referent subproof does not assume a negation"];
 
-		if (end.sentence.type !== SentenceType.Contradiction)
+		if (end.sentence.type !== "contradiction")
 			throw [
 				false,
 				"the referent subproof does not demonstrate a contradiction",
@@ -421,7 +421,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (line.reason[0] === ProofLineType.NegationElimination) {
-		if (line.sentence.type !== SentenceType.Contradiction)
+		if (line.sentence.type !== "contradiction")
 			throw [
 				false,
 				"negation elimination can only be used to demonstrate a contradiction",
@@ -435,8 +435,8 @@ function validateProofLineWithErrors(
 		);
 
 		let firstNegation = true;
-		if (firstReferent.sentence.type !== SentenceType.Negation) {
-			if (secondReferent.sentence.type !== SentenceType.Negation)
+		if (firstReferent.sentence.type !== "negation") {
+			if (secondReferent.sentence.type !== "negation")
 				throw [false, "the referent sentence is not a negation"];
 			firstNegation = false;
 		}
@@ -447,7 +447,7 @@ function validateProofLineWithErrors(
 		): string | null {
 			const negationLine: ProofLine & {
 				sentence: {
-					type: SentenceType.Negation;
+					type: "negation";
 					value: Sentence;
 				};
 			} = (firstNegation ? firstReferent : secondReferent) as any;
@@ -463,7 +463,7 @@ function validateProofLineWithErrors(
 			if (
 				tryAgain &&
 				failureReason !== null &&
-				eliminationLine.sentence.type === SentenceType.Negation
+				eliminationLine.sentence.type === "negation"
 			)
 				return validateNegationElimination(!firstNegation, false);
 
@@ -478,7 +478,7 @@ function validateProofLineWithErrors(
 
 	if (line.reason[0] === ProofLineType.Explosion) {
 		const referent = referToLine(line, precedingProof, line.reason[1]);
-		if (referent.sentence.type !== SentenceType.Contradiction)
+		if (referent.sentence.type !== "contradiction")
 			throw [false, "the referent is not a contradiction"];
 
 		return [true];
@@ -507,15 +507,15 @@ function validateProofLineWithErrors(
 		);
 
 		let firstDisjunction = true;
-		if (firstReferent.sentence.type !== SentenceType.Disjunction) {
-			if (secondReferent.sentence.type !== SentenceType.Disjunction)
+		if (firstReferent.sentence.type !== "disjunction") {
+			if (secondReferent.sentence.type !== "disjunction")
 				throw [false, "the referent sentence is not a disjunction"];
 			firstDisjunction = false;
 		}
 
 		const disjunctionLine: ProofLine & {
 			sentence: {
-				type: SentenceType.Disjunction;
+				type: "disjunction";
 				value: [Sentence, Sentence];
 			};
 		} = (firstDisjunction ? firstReferent : secondReferent) as any;
@@ -523,7 +523,7 @@ function validateProofLineWithErrors(
 			? secondReferent
 			: firstReferent;
 
-		if (eliminationLine.sentence.type !== SentenceType.Negation)
+		if (eliminationLine.sentence.type !== "negation")
 			throw [false, "the referent sentence is not a negation"];
 
 		const [leftHandSentence, rightHandSentence] =
@@ -546,7 +546,7 @@ function validateProofLineWithErrors(
 	}
 
 	if (line.reason[0] === ProofLineType.ModusTollens) {
-		if (line.sentence.type !== SentenceType.Negation)
+		if (line.sentence.type !== "negation")
 			throw [
 				false,
 				"modus tollens can only be used to introduce a negation",
@@ -560,15 +560,15 @@ function validateProofLineWithErrors(
 		);
 
 		let firstImplication = true;
-		if (firstReferent.sentence.type !== SentenceType.Implication) {
-			if (secondReferent.sentence.type !== SentenceType.Implication)
+		if (firstReferent.sentence.type !== "implication") {
+			if (secondReferent.sentence.type !== "implication")
 				throw [false, "the referent sentence is not a conditional"];
 			firstImplication = false;
 		}
 
 		const implicationLine: ProofLine & {
 			sentence: {
-				type: SentenceType.Implication;
+				type: "implication";
 				value: [Sentence, Sentence];
 			};
 		} = (firstImplication ? firstReferent : secondReferent) as any;
@@ -576,7 +576,7 @@ function validateProofLineWithErrors(
 			? secondReferent
 			: firstReferent;
 
-		if (eliminationLine.sentence.type !== SentenceType.Negation)
+		if (eliminationLine.sentence.type !== "negation")
 			throw [false, "the referent sentence is not a negation"];
 
 		const [antecedent, consequent] = implicationLine.sentence.value;
@@ -594,8 +594,8 @@ function validateProofLineWithErrors(
 		const referent = referToLine(line, precedingProof, line.reason[1]);
 
 		if (
-			referent.sentence.type !== SentenceType.Negation ||
-			referent.sentence.value.type !== SentenceType.Negation
+			referent.sentence.type !== "negation" ||
+			referent.sentence.value.type !== "negation"
 		)
 			throw [false, "the referent sentence is not a double negation"];
 
@@ -633,10 +633,10 @@ function validateProofLineWithErrors(
 			];
 
 		const assumptionsEqual =
-			firstStart.sentence.type === SentenceType.Negation &&
+			firstStart.sentence.type === "negation" &&
 			equal(firstStart.sentence.value, secondStart.sentence);
 		const assumptionsEqualReversed =
-			secondStart.sentence.type === SentenceType.Negation &&
+			secondStart.sentence.type === "negation" &&
 			equal(secondStart.sentence.value, firstStart.sentence);
 
 		if (!(assumptionsEqual || assumptionsEqualReversed))
@@ -655,15 +655,14 @@ function validateProofLineWithErrors(
 			"the referree and referent do not comprise one of De Morgan's laws";
 
 		let negatedReferent = true;
-		if (referent.sentence.type !== SentenceType.Negation) {
-			if (line.sentence.type !== SentenceType.Negation)
-				throw [false, failureReason];
+		if (referent.sentence.type !== "negation") {
+			if (line.sentence.type !== "negation") throw [false, failureReason];
 			negatedReferent = false;
 		}
 
 		const negationLine: ProofLine & {
 			sentence: {
-				type: SentenceType.Negation;
+				type: "negation";
 				value: Sentence;
 			};
 		} = (negatedReferent ? referent : line) as any;
@@ -671,19 +670,15 @@ function validateProofLineWithErrors(
 
 		if (
 			// ~(A & B) > (~A | ~B)
-			(negationLine.sentence.value.type === SentenceType.Conjunction &&
-				transformedLine.sentence.type === SentenceType.Disjunction &&
-				transformedLine.sentence.value[0].type ===
-					SentenceType.Negation &&
-				transformedLine.sentence.value[1].type ===
-					SentenceType.Negation) ||
+			(negationLine.sentence.value.type === "conjunction" &&
+				transformedLine.sentence.type === "disjunction" &&
+				transformedLine.sentence.value[0].type === "negation" &&
+				transformedLine.sentence.value[1].type === "negation") ||
 			// ~(A | B) > (~A & ~B)
-			(negationLine.sentence.value.type === SentenceType.Disjunction &&
-				transformedLine.sentence.type === SentenceType.Conjunction &&
-				transformedLine.sentence.value[0].type ===
-					SentenceType.Negation &&
-				transformedLine.sentence.value[1].type ===
-					SentenceType.Negation)
+			(negationLine.sentence.value.type === "disjunction" &&
+				transformedLine.sentence.type === "conjunction" &&
+				transformedLine.sentence.value[0].type === "negation" &&
+				transformedLine.sentence.value[1].type === "negation")
 		) {
 			const [firstLeft, firstRight] = negationLine.sentence.value.value;
 			const [secondLeft, secondRight] = negationLine.sentence.value.value;

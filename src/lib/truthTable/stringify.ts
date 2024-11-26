@@ -1,26 +1,26 @@
-import { type Sentence, SentenceType } from "../logic/Sentence";
+import { type Sentence } from "../logic/Sentence";
 
 function stringifyRecursive(sentence: Sentence, p = true): string {
-	if (sentence.type === SentenceType.Contradiction) return "⊥";
+	if (sentence.type === "contradiction") return "⊥";
 
-	if (sentence.type === SentenceType.Letter)
+	if (sentence.type === "letter")
 		return (
 			sentence.value[0] +
 			(sentence.value[1] !== undefined ? sentence.value[1] : "")
 		);
-	if (sentence.type === SentenceType.Negation)
+	if (sentence.type === "negation")
 		return "¬" + stringifyRecursive(sentence.value);
 
 	let a = stringifyRecursive(sentence.value[0]);
 	let b = stringifyRecursive(sentence.value[1]);
 
-	if (sentence.type === SentenceType.Conjunction)
+	if (sentence.type === "conjunction")
 		return `${p ? "(" : ""}${a} ∧ ${b}${p ? ")" : ""}`;
-	if (sentence.type === SentenceType.Disjunction)
+	if (sentence.type === "disjunction")
 		return `${p ? "(" : ""}${a} ∨ ${b}${p ? ")" : ""}`;
-	if (sentence.type === SentenceType.Implication)
+	if (sentence.type === "implication")
 		return `${p ? "(" : ""}${a} → ${b}${p ? ")" : ""}`;
-	if (sentence.type === SentenceType.BiImplication)
+	if (sentence.type === "bi_implication")
 		return `${p ? "(" : ""}${a} ↔ ${b}${p ? ")" : ""}`;
 
 	throw "unexpected sentence type";

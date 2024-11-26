@@ -4,25 +4,25 @@ import { getLetters, getModels } from "../logic/getModels";
 import { includesLetter } from "../logic/Letter";
 import { LetterComponent } from "./LetterComponent";
 import { resolve } from "../logic/resolve";
-import { Sentence, SentenceType } from "../logic/Sentence";
+import { Sentence } from "../logic/Sentence";
 
 function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
-	if (sentence.type === SentenceType.Contradiction) return ["⊥"];
+	if (sentence.type === "contradiction") return ["⊥"];
 
-	if (sentence.type === SentenceType.Letter) {
+	if (sentence.type === "letter") {
 		return [<LetterComponent letter={sentence.value} />];
 	}
 
-	if (sentence.type === SentenceType.Negation)
+	if (sentence.type === "negation")
 		return ["¬", ...getColumnHeaders(sentence.value)];
 
 	const leftNodes = getColumnHeaders(sentence.value[0]);
 	const rightNodes = getColumnHeaders(sentence.value[1]);
 
 	let connective: string;
-	if (sentence.type === SentenceType.Conjunction) connective = "∧";
-	else if (sentence.type === SentenceType.Disjunction) connective = "∨";
-	else if (sentence.type === SentenceType.Implication) connective = "→";
+	if (sentence.type === "conjunction") connective = "∧";
+	else if (sentence.type === "disjunction") connective = "∨";
+	else if (sentence.type === "implication") connective = "→";
 	else connective = "↔";
 
 	leftNodes[0] = <>({leftNodes[0]}</>;
@@ -34,12 +34,9 @@ function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
 }
 
 function getArrayOfSentence(sentence: Sentence): Sentence[] {
-	if (
-		sentence.type === SentenceType.Letter ||
-		sentence.type === SentenceType.Contradiction
-	)
+	if (sentence.type === "letter" || sentence.type === "contradiction")
 		return [sentence];
-	if (sentence.type === SentenceType.Negation)
+	if (sentence.type === "negation")
 		return [sentence, ...getArrayOfSentence(sentence.value)];
 	return [
 		...getArrayOfSentence(sentence.value[0]),
@@ -50,9 +47,9 @@ function getArrayOfSentence(sentence: Sentence): Sentence[] {
 
 function getPrimaryConnectiveIndex(sentence: Sentence): number {
 	if (
-		sentence.type === SentenceType.Letter ||
-		sentence.type === SentenceType.Negation ||
-		sentence.type === SentenceType.Contradiction
+		sentence.type === "letter" ||
+		sentence.type === "negation" ||
+		sentence.type === "contradiction"
 	)
 		return 0;
 	return getArrayOfSentence(sentence.value[0]).length;

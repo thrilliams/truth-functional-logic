@@ -1,5 +1,5 @@
 import { con, not, wrapLetter } from "./helpers";
-import { SentenceType, type Sentence } from "./Sentence";
+import { type Sentence } from "./Sentence";
 
 export function parseSentence(string: string): Sentence | null {
 	const [sentence, _remainder] = matchSentence(string, true);
@@ -75,11 +75,7 @@ const matchNegation = (input: string): MatchResult => {
 };
 
 const matchConnectiveInner = (
-	type:
-		| SentenceType.Conjunction
-		| SentenceType.Disjunction
-		| SentenceType.Implication
-		| SentenceType.BiImplication,
+	type: "conjunction" | "disjunction" | "implication" | "bi_implication",
 	connective: RegExp,
 	input: string,
 	rightBracket?: string
@@ -110,11 +106,7 @@ const matchConnectiveInner = (
 
 const matchConnective =
 	(
-		type:
-			| SentenceType.Conjunction
-			| SentenceType.Disjunction
-			| SentenceType.Implication
-			| SentenceType.BiImplication,
+		type: "conjunction" | "disjunction" | "implication" | "bi_implication",
 		connective: RegExp
 	): ((input: string, requireBrackets?: boolean) => MatchResult) =>
 	(input, requireBrackets = true) => {
@@ -141,20 +133,14 @@ const matchConnective =
 		return [];
 	};
 
-const matchConjunction = matchConnective(
-	SentenceType.Conjunction,
-	/∧|\/\\|&| and /
-);
+const matchConjunction = matchConnective("conjunction", /∧|\/\\|&| and /);
 
-const matchDisjunction = matchConnective(
-	SentenceType.Disjunction,
-	/∨|\\\/|\|| or /
-);
+const matchDisjunction = matchConnective("disjunction", /∨|\\\/|\|| or /);
 
-const matchImplication = matchConnective(SentenceType.Implication, /→|->|=>|>/);
+const matchImplication = matchConnective("implication", /→|->|=>|>/);
 
 const matchBiImplication = matchConnective(
-	SentenceType.BiImplication,
+	"bi_implication",
 	// <> is non-standard by the criteria of forall x: Calgary
 	// thankfully i like it so who cares
 	/↔|<->|<=>|<>/

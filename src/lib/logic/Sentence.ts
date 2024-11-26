@@ -1,22 +1,20 @@
 import { Letter } from "./Letter";
 
-export enum SentenceType {
-	Letter,
-	Negation,
-	Conjunction,
-	Disjunction,
-	Implication,
-	BiImplication,
-
-	Contradiction,
-}
+export type SentenceType =
+	| "letter"
+	| "negation"
+	| "conjunction"
+	| "disjunction"
+	| "implication"
+	| "bi_implication"
+	| "contradiction";
 
 export type Sentence = { type: SentenceType } & (
-	| { type: SentenceType.Letter; value: Letter }
-	| { type: SentenceType.Negation; value: Sentence }
-	| { type: SentenceType.Conjunction; value: [Sentence, Sentence] }
-	| { type: SentenceType.Disjunction; value: [Sentence, Sentence] }
-	| { type: SentenceType.Implication; value: [Sentence, Sentence] }
-	| { type: SentenceType.BiImplication; value: [Sentence, Sentence] }
-	| { type: SentenceType.Contradiction }
+	| { type: "letter"; value: Letter }
+	| { type: "negation"; value: Sentence }
+	| { type: "conjunction"; value: [Sentence, Sentence] }
+	| { type: "disjunction"; value: [Sentence, Sentence] }
+	| { type: "implication"; value: [Sentence, Sentence] }
+	| { type: "bi_implication"; value: [Sentence, Sentence] }
+	| { type: "contradiction" }
 );

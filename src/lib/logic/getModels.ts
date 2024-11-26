@@ -1,12 +1,11 @@
-import { SentenceType, type Sentence } from "./Sentence";
+import { type Sentence } from "./Sentence";
 import { includesLetter, type Letter } from "./Letter";
 
 export function getLetters(sentence: Sentence): Letter[] {
-	if (sentence.type === SentenceType.Contradiction) return [];
+	if (sentence.type === "contradiction") return [];
 
-	if (sentence.type === SentenceType.Letter) return [sentence.value];
-	if (sentence.type === SentenceType.Negation)
-		return getLetters(sentence.value);
+	if (sentence.type === "letter") return [sentence.value];
+	if (sentence.type === "negation") return getLetters(sentence.value);
 
 	let letters = getLetters(sentence.value[0]);
 
