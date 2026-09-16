@@ -1,62 +1,71 @@
-import { useState } from "react";
+import { createMemo, createSignal, Match, Switch } from "solid-js";
+import { Mode } from "../../App";
+import { createPersistentSignal } from "../createPersistentSignal";
 import { parseSentence } from "../logic/parseSentence";
 import { TruthTable } from "./TruthTable";
-import { Mode } from "../../App";
-import { useLocalStorageState } from "../useLocalStorageState";
 
-export function InteractiveTruthTable() {
+export function InteractiveTruthTable(props: { initial?: string }) {
 	const labelClasses = "block text-right text-xs italic";
 
-	const [input, setInput] = useLocalStorageState<string>(Mode.TruthTable, "");
-	let sentence = parseSentence(input);
+	const [input, setInput] = createPersistentSignal<string>(
+		Mode.TruthTable,
+		props?.initial || "",
+	);
 
-	const [onlyTrue, setOnlyTrue] = useState(false);
+	let sentence = createMemo(() => parseSentence(input()));
+
+	const [onlyTrue, setOnlyTrue] = createSignal(false);
 
 	return (
-		<div className="col-start-2 w-full flex flex-col gap-4 mt-8 py-2 px-4 border rounded mx-auto">
+		<div class="col-start-2 w-full flex flex-col gap-4 mt-8 py-2 px-4 border rounded mx-auto">
 			<div>
-				<label
-					className={labelClasses}
-					htmlFor="tfl-input"
-				>
+				<label class={labelClasses} for="tfl-input">
 					tfl input
 				</label>
 				<input
 					id="tfl-input"
-					className="px-1 border rounded w-full"
+					class="px-1 border rounded w-full"
 					type="text"
 					placeholder="(A > B) | C"
-					value={input}
+					value={input()}
 					onChange={(event) => setInput(event.target.value)}
 				/>
 			</div>
-			<div className="h-[257px] overflow-auto">
-				<span className={labelClasses}>truth table</span>
-				{input === "" ? (
-					<p className="text-center text-xs">awaiting input...</p>
-				) : sentence ? (
-					<TruthTable
-						sentence={sentence}
-						onlyTrue={onlyTrue}
-					/>
-				) : (
-					<pre className="text-center text-xs">
-						[ungrammatical input]
-					</pre>
-				)}
+			<div class="min-h-32">
+				<span class={labelClasses}>truth table</span>
+				<Switch
+					fallback={
+						<pre class="text-center text-xs">
+							[ungrammatical input]
+						</pre>
+					}
+				>
+					<Match when={input() === ""}>
+						<p class="text-center text-xs">awaiting input...</p>
+					</Match>
+					<Match when={sentence()}>
+						{(sentence) => (
+							<TruthTable
+								sentence={sentence()}
+								onlyTrue={onlyTrue()}
+							/>
+						)}
+					</Match>
+				</Switch>
 			</div>
-			<div className="flex gap-4 justify-end">
-				<div className="space-x-1">
+
+			<div class="flex gap-4 justify-end">
+				<div class="space-x-1">
 					<input
 						type="checkbox"
 						id="show-only-true"
-						className="h-3"
-						checked={onlyTrue}
+						class="h-3"
+						checked={onlyTrue()}
 						onChange={(event) => setOnlyTrue(event.target.checked)}
 					/>
-					<label htmlFor="show-only-true">
+					<label for="show-only-true">
 						<span
-							className="text-xs italic cursor-help underline decoration-dotted"
+							class="text-xs cursor-help underline decoration-dotted"
 							title="show only cases where the primary connective is satisfied"
 						>
 							only true

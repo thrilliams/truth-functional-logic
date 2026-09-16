@@ -1,38 +1,55 @@
-import ReactCodeMirror from "@uiw/react-codemirror";
+import { EditorState } from "@codemirror/state";
+import { lineNumbers, placeholder } from "@codemirror/view";
 import clsx from "clsx";
-import createTheme from "@uiw/codemirror-themes";
+import {
+	createCodeMirror,
+	createEditorControlledValue,
+	createEditorFocus,
+} from "solid-codemirror";
+import { createEffect, createMemo } from "solid-js";
 import { Mode } from "../../App";
-import { useLocalStorageState } from "../useLocalStorageState";
+import { createPersistentSignal } from "../createPersistentSignal";
 import { parseProof } from "../proof/parseProof";
 import { ProofComponent } from "./ProofComponent";
 
-const theme = createTheme({
-	theme: "light",
-	settings: { gutterBorder: "#e5e7eb" },
-	styles: [],
-});
-
-export function InteractiveProofWriter() {
-	const [input, setInput] = useLocalStorageState(Mode.Proof, "");
-
-	const proof = parseProof(input);
+export function InteractiveProofWriter(props: { initial?: string }) {
 	const editorClasses =
 		"col-start-1 row-start-1 m-4 rounded border overflow-hidden";
 
+	const [input, setInput] = createPersistentSignal(
+		Mode.Proof,
+		props?.initial || "",
+	);
+
+	const { ref, editorView, createExtension } = createCodeMirror({
+		value: input(),
+		onValueChange: setInput,
+	});
+
+	createEditorControlledValue(editorView, input);
+
+	createExtension([
+		EditorState.tabSize.of(1),
+		placeholder("awaiting input..."),
+		lineNumbers(),
+	]);
+
+	const { setFocused } = createEditorFocus(editorView);
+	createEffect(() => setFocused(true));
+
+	const proof = () => parseProof(input());
+
 	return (
-		<div className="col-span-3 row-span-2 grid grid-cols-2 relative">
-			<ReactCodeMirror
-				className={clsx(editorClasses, "pointer-events-auto text-base")}
-				value={input}
-				onChange={setInput}
-				height="100%"
-				basicSetup={{ tabSize: 1 }}
-				placeholder={"awaiting input..."}
-				theme={theme}
-				autoFocus
+		<div class="col-span-3 row-span-2 grid grid-cols-2 relative">
+			<div
+				ref={ref}
+				class={clsx(
+					editorClasses,
+					"pointer-events-auto text-base *:h-full",
+				)}
 			/>
-			<div className={clsx(editorClasses, "z-10 pointer-events-none")} />
-			<ProofComponent proof={proof} />
+			<div class={clsx(editorClasses, "z-10 pointer-events-none")} />
+			<ProofComponent proof={proof()} />
 		</div>
 	);
 }

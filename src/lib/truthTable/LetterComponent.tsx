@@ -4,11 +4,11 @@ interface LetterComponentProps {
 	letter: Letter;
 }
 
-export function LetterComponent({ letter }: LetterComponentProps) {
+export function LetterComponent(props: LetterComponentProps) {
 	return (
 		<>
-			{letter[0]}
-			{letter[1] !== undefined && <sub>{letter[1]}</sub>}
+			{props.letter[0]}
+			{props.letter[1] !== undefined && <sub>{props.letter[1]}</sub>}
 		</>
 	);
 }

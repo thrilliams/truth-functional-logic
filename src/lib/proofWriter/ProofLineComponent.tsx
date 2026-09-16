@@ -1,30 +1,24 @@
-import { ReactNode } from "react";
+import { JSXElement } from "solid-js";
 
 interface ProofLineComponentProps {
 	index: number;
-	sentence?: ReactNode;
-	reason?: ReactNode;
-	validity?: ReactNode;
+	sentence?: JSXElement;
+	reason?: JSXElement;
+	validity?: JSXElement;
 	validityMessage?: string;
 }
 
-export function ProofLineComponent({
-	index,
-	sentence,
-	reason,
-	validity,
-	validityMessage,
-}: ProofLineComponentProps) {
+export function ProofLineComponent(props: ProofLineComponentProps) {
 	return (
 		<>
-			<span className="inline-flex justify-end text-right">
-				{index + 1}
-				<span className="font-mono whitespace-pre"> </span>
+			<span class="inline-flex justify-end text-right">
+				{props.index + 1}
+				<span class="font-mono whitespace-pre"> </span>
 			</span>
-			<div className="flex">{sentence}</div>
-			<span className="text-right">{reason}</span>
-			<span className="text-center" title={validityMessage}>
-				{validity}
+			<div class="flex">{props.sentence}</div>
+			<span class="text-right">{props.reason}</span>
+			<span class="text-center" title={props.validityMessage}>
+				{props.validity}
 			</span>
 		</>
 	);

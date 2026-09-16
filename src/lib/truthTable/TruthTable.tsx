@@ -1,12 +1,12 @@
 import { clsx } from "clsx";
-import { Fragment } from "react/jsx-runtime";
+import { JSXElement } from "solid-js";
 import { getLetters, getModels } from "../logic/getModels";
 import { includesLetter } from "../logic/Letter";
-import { LetterComponent } from "./LetterComponent";
 import { resolve } from "../logic/resolve";
 import { Sentence } from "../logic/Sentence";
+import { LetterComponent } from "./LetterComponent";
 
-function getColumnHeaders(sentence: Sentence): React.ReactNode[] {
+function getColumnHeaders(sentence: Sentence): JSXElement[] {
 	if (sentence.type === "contradiction") return ["⊥"];
 
 	if (sentence.type === "letter") {
@@ -60,49 +60,48 @@ interface TruthTableProps {
 	onlyTrue?: boolean;
 }
 
-export function TruthTable({ sentence, onlyTrue = false }: TruthTableProps) {
-	const letters = getLetters(sentence);
-	const models = getModels(sentence);
+export function TruthTable(props: TruthTableProps) {
+	const letters = getLetters(props.sentence);
+	const models = getModels(props.sentence);
 
-	const headers = getColumnHeaders(sentence);
-	const columns = getArrayOfSentence(sentence);
+	const headers = getColumnHeaders(props.sentence);
+	const columns = getArrayOfSentence(props.sentence);
 
-	const primaryIndex = getPrimaryConnectiveIndex(sentence);
+	const primaryIndex = getPrimaryConnectiveIndex(props.sentence);
 
 	return (
 		<div
-			className="text-center grid justify-center"
+			class="text-center grid justify-center"
 			style={{
-				gridTemplateColumns: `repeat(${letters.length}, ${Math.max(
+				"grid-template-columns": `repeat(${letters.length}, ${Math.max(
 					4 / letters.length,
-					2
+					2,
 				)}rem) repeat(${headers.length}, ${Math.max(
 					6 / headers.length,
-					2
+					2,
 				)}rem)`,
 			}}
 		>
 			{letters.length > 0 && (
 				<div
-					className="border-r min-w-16"
-					style={{ gridColumn: `span ${letters.length}` }}
+					class="border-r min-w-16"
+					style={{ "grid-column": `span ${letters.length}` }}
 				>
 					model
 				</div>
 			)}
 			<div
-				className="min-w-24"
-				style={{ gridColumn: `span ${headers.length}` }}
+				class="min-w-24"
+				style={{ "grid-column": `span ${headers.length}` }}
 			>
 				sentence
 			</div>
 
 			{letters.map((letter, i) => (
 				<div
-					key={i}
-					className={clsx(
+					class={clsx(
 						"border-b",
-						i === letters.length - 1 && "border-r"
+						i === letters.length - 1 && "border-r",
 					)}
 				>
 					<LetterComponent letter={letter} />
@@ -111,41 +110,31 @@ export function TruthTable({ sentence, onlyTrue = false }: TruthTableProps) {
 
 			{headers.map((node, i) => (
 				<div
-					key={i + letters.length}
-					className={clsx(
-						"border-b",
-						i === primaryIndex && "font-bold"
-					)}
+					class={clsx("border-b", i === primaryIndex && "font-bold")}
 				>
 					{node}
 				</div>
 			))}
 
-			{(onlyTrue
-				? models.filter((model) => resolve(sentence, model))
+			{(props.onlyTrue
+				? models.filter((model) => resolve(props.sentence, model))
 				: models
-			).map((model, i) => (
-				<Fragment key={i}>
+			).map((model) => (
+				<>
 					{letters.map((letter, i) => (
 						<div
-							key={i}
-							className={clsx(
-								i === letters.length - 1 && "border-r"
-							)}
+							class={clsx(i === letters.length - 1 && "border-r")}
 						>
 							{includesLetter(model, letter) ? "T" : "F"}
 						</div>
 					))}
 
 					{columns.map((part, i) => (
-						<div
-							key={i + letters.length}
-							className={clsx(i === primaryIndex && "font-bold")}
-						>
+						<div class={clsx(i === primaryIndex && "font-bold")}>
 							{resolve(part, model) ? "T" : "F"}
 						</div>
 					))}
-				</Fragment>
+				</>
 			))}
 		</div>
 	);
