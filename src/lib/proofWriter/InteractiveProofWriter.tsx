@@ -14,7 +14,7 @@ import { ProofComponent } from "./ProofComponent";
 
 export function InteractiveProofWriter(props: { initial?: string }) {
 	const editorClasses =
-		"col-start-1 row-start-1 m-4 rounded border overflow-hidden";
+		"col-start-1 row-start-1 rounded border overflow-hidden";
 
 	const [input, setInput] = createPersistentSignal(
 		Mode.Proof,
