@@ -1,15 +1,11 @@
 import clsx from "clsx";
 import { basicSetup } from "codemirror";
-import {
-	createCodeMirror,
-	createEditorControlledValue,
-	createEditorFocus,
-} from "solid-codemirror";
-import { createEffect, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 import { Mode } from "../../App";
 import { createPersistentSignal } from "../createPersistentSignal";
 import { logic } from "../language";
 import { parseProof } from "../proof/parseProof";
+import { createEditor } from "./createEditor";
 import { ProofComponent } from "./ProofComponent";
 
 export function InteractiveProofValidator(props: { initial?: string }) {
@@ -21,16 +17,11 @@ export function InteractiveProofValidator(props: { initial?: string }) {
 		props?.initial || "",
 	);
 
-	const { ref, editorView, createExtension } = createCodeMirror({
-		value: input(),
-		onValueChange: setInput,
+	const ref = createEditor({
+		input,
+		setInput,
+		extensions: [basicSetup, logic],
 	});
-
-	createEditorControlledValue(editorView, input);
-	createExtension([basicSetup, logic]);
-
-	const { setFocused } = createEditorFocus(editorView);
-	createEffect(() => setFocused(true));
 
 	const proof = createMemo(() => parseProof(input()));
 
