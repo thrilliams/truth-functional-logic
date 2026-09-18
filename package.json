@@ -17,14 +17,14 @@
 		"clsx": "^2.1.1",
 		"codemirror": "^6.0.2",
 		"solid-codemirror": "^2.3.3",
-		"solid-js": "^1.9.15"
+		"solid-js": "^2.0.0-rc.9"
 	},
 	"devDependencies": {
 		"@lezer/generator": "^1.8.0",
+		"@solidjs/vite-plugin": "^3.0.0-next.44",
 		"@tailwindcss/vite": "^4.3.3",
 		"tailwindcss": "^4.3.3",
-		"typescript": "^5.9.3",
-		"vite": "^7.3.6",
-		"vite-plugin-solid": "^2.11.14"
+		"typescript": "^7.0.2",
+		"vite": "^8.3.0"
 	}
 }

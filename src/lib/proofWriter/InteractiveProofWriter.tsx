@@ -5,7 +5,7 @@ import {
 	createEditorControlledValue,
 	createEditorFocus,
 } from "solid-codemirror";
-import { createEffect, createMemo } from "solid-js";
+import { createMemo, onSettled } from "solid-js";
 import { Mode } from "../../App";
 import { createPersistentSignal } from "../createPersistentSignal";
 import { logic } from "../language";
@@ -30,7 +30,7 @@ export function InteractiveProofWriter(props: { initial?: string }) {
 	createExtension([basicSetup, logic]);
 
 	const { setFocused } = createEditorFocus(editorView);
-	createEffect(() => setFocused(true));
+	onSettled(() => setFocused(true));
 
 	const proof = createMemo(() => parseProof(input()));
 

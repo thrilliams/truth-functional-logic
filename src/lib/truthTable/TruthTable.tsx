@@ -1,12 +1,12 @@
 import { clsx } from "clsx";
-import { JSXElement } from "solid-js";
 import { getLetters, getModels } from "../logic/getModels";
 import { includesLetter } from "../logic/Letter";
 import { resolve } from "../logic/resolve";
 import { Sentence } from "../logic/Sentence";
 import { LetterComponent } from "./LetterComponent";
+import { JSX } from "@solidjs/web";
 
-function getColumnHeaders(sentence: Sentence): JSXElement[] {
+function getColumnHeaders(sentence: Sentence): JSX.Element[] {
 	if (sentence.type === "contradiction") return ["⊥"];
 
 	if (sentence.type === "letter") {
