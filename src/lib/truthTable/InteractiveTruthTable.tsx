@@ -17,18 +17,18 @@ export function InteractiveTruthTable(props: { initial?: string }) {
 	const [onlyTrue, setOnlyTrue] = createSignal(false);
 
 	return (
-		<div class="col-start-2 w-full flex flex-col gap-4 mt-8 py-2 px-4 border rounded mx-auto">
+		<div class="col-start-2 w-full flex flex-col gap-4 py-2 px-4 border rounded mx-auto">
 			<div>
 				<label class={labelClasses} for="tfl-input">
 					tfl input
 				</label>
 				<input
 					id="tfl-input"
-					class="px-1 border rounded w-full"
+					class="px-1 border rounded w-full font-mono"
 					type="text"
 					placeholder="(A > B) | C"
 					value={input()}
-					onChange={(event) => setInput(event.target.value)}
+					onInput={(event) => setInput(event.target.value)}
 				/>
 			</div>
 			<div class="min-h-32">

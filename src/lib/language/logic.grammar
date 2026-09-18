@@ -1,0 +1,100 @@
+@precedence { subproof, continue, conclusions @left, connective @left }
+@skip { space }
+
+@top Proof { Premise* proofChild+ }
+@top Proposition { sentence }
+
+@context trackIndentation from "./indentation.ts"
+@external tokens indentation from "./indentation.ts" { indent dedent }
+
+Premise { sentence ":pr" eol }
+
+proofChild { Line* parallelSubproofs? !conclusions Line+ }
+Line { ( sentence | Contradiction ) Reason eol }
+
+parallelSubproofs { indent Subproof+ dedent }
+Assumption { sentence ":as" eol }
+Subproof { !subproof Assumption !continue proofChild+ }
+
+sentence {
+    Literal |
+    Negation |
+    connective |
+    "(" connective ")" |
+    "[" connective "]"
+}
+
+Negation { !connective negation sentence }
+
+connective {
+    Disjunction |
+    Conjunction |
+    Implication |
+    BiImplication
+}
+
+Disjunction { sentence !connective disjunction sentence }
+Conjunction { sentence !connective conjunction sentence }
+Implication { sentence !connective implication sentence }
+BiImplication { sentence !connective biImplication sentence }
+
+Reason {
+    ":"
+    (
+        DisjunctionIntroduction |
+        DisjunctionElimination |
+        ConjunctionIntroduction |
+        ConjunctionElimination |
+        ImplicationIntroduction |
+        ImplicationElimination |
+        BiImplicationIntroduction |
+        BiImplicationElimination |
+        NegationIntroduction |
+        NegationElimination |
+        Explosion |
+        Reiteration |
+        DisjunctiveSyllogism |
+        ModusTollens |
+        DoubleNegationElimination |
+        ExcludedMiddle |
+        DeMorganRules
+    )
+}
+
+DisjunctionIntroduction { disjunction "i" Single }
+ConjunctionIntroduction { conjunction "i" Single "," Single }
+ImplicationIntroduction { implication "i" Range }
+BiImplicationIntroduction { biImplication "i" Range "," Range }
+NegationIntroduction { negation "i" Range }
+DisjunctionElimination { disjunction "e" Single "," Range "," Range }
+ConjunctionElimination { conjunction "e" Single }
+ImplicationElimination { implication "e" Single "," Single }
+BiImplicationElimination { biImplication "e" Single "," Single }
+NegationElimination { negation "e" Single "," Single }
+Explosion { "x" Single }
+Reiteration { "r" Single }
+DisjunctiveSyllogism { "ds" Single "," Single }
+ModusTollens { "mt" Single "," Single }
+DoubleNegationElimination { "dne" Single }
+ExcludedMiddle { "lem" Range "," Range }
+DeMorganRules { "dem" Single }
+
+Single { lineNumber }
+Range { Single "-" Single }
+
+@tokens {
+    Literal { @asciiLetter ( "_"? @digit )? }
+
+    space { " "+ }
+    eol { "\n" | @eof }
+
+    Contradiction { "!?" | "⊥" }
+    
+    negation { $[¬\-~] | "not" }
+    disjunction { $[∨\|] | "\\/" | "or" }
+    conjunction { $[∧&] | "/\\" | "and" }
+    implication { $[→>] | "->" | "=>" }
+    biImplication { "↔" | "<->" | "<=>" | "<>" }
+
+    lineNumber { @digit+ }
+}

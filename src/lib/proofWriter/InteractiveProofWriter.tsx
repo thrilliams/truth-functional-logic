@@ -1,6 +1,5 @@
-import { EditorState } from "@codemirror/state";
-import { lineNumbers, placeholder } from "@codemirror/view";
 import clsx from "clsx";
+import { basicSetup } from "codemirror";
 import {
 	createCodeMirror,
 	createEditorControlledValue,
@@ -9,6 +8,7 @@ import {
 import { createEffect, createMemo } from "solid-js";
 import { Mode } from "../../App";
 import { createPersistentSignal } from "../createPersistentSignal";
+import { logic } from "../language";
 import { parseProof } from "../proof/parseProof";
 import { ProofComponent } from "./ProofComponent";
 
@@ -27,17 +27,12 @@ export function InteractiveProofWriter(props: { initial?: string }) {
 	});
 
 	createEditorControlledValue(editorView, input);
-
-	createExtension([
-		EditorState.tabSize.of(1),
-		placeholder("awaiting input..."),
-		lineNumbers(),
-	]);
+	createExtension([basicSetup, logic]);
 
 	const { setFocused } = createEditorFocus(editorView);
 	createEffect(() => setFocused(true));
 
-	const proof = () => parseProof(input());
+	const proof = createMemo(() => parseProof(input()));
 
 	return (
 		<div class="col-span-3 row-span-2 grid grid-cols-2 relative">
