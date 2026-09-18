@@ -1,10 +1,10 @@
-import { JSX } from "@solidjs/web";
+import { JSXElement } from "solid-js";
 
 interface ProofLineComponentProps {
 	index: number;
-	sentence?: JSX.Element;
-	reason?: JSX.Element;
-	validity?: JSX.Element;
+	sentence?: JSXElement;
+	reason?: JSXElement;
+	validity?: JSXElement;
 	validityMessage?: string;
 }
 
