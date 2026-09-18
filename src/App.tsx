@@ -1,5 +1,5 @@
 import { createPersistentSignal } from "./lib/createPersistentSignal";
-import { InteractiveProofWriter } from "./lib/proofWriter/InteractiveProofWriter";
+import { InteractiveProofValidator } from "./lib/proofValidator/InteractiveProofValidator";
 import { InteractiveTruthTable } from "./lib/truthTable/InteractiveTruthTable";
 
 export enum Mode {
@@ -25,7 +25,7 @@ export function App() {
 			}}
 		>
 			{mode() === Mode.Proof ? (
-				<InteractiveProofWriter />
+				<InteractiveProofValidator />
 			) : (
 				<InteractiveTruthTable />
 			)}

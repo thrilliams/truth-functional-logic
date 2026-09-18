@@ -12,13 +12,13 @@ import {
 function referToLine(
 	line: ProofLine,
 	precedingProof: Proof,
-	index: number
+	index: number,
 ): ProofLine {
 	const precedingLine = precedingProof[index];
 
 	const [precedingLineValid] = validateProofLine(
 		precedingLine,
-		precedingProof.slice(0, index)
+		precedingProof.slice(0, index),
 	);
 	if (!precedingLineValid)
 		throw [false, "the referent sentence is not itself valid"];
@@ -26,7 +26,7 @@ function referToLine(
 	if (
 		!validateSubproofIndices(
 			line.subproofIndex,
-			precedingLine.subproofIndex
+			precedingLine.subproofIndex,
 		)
 	)
 		throw [false, "the referent sentence is in an unaccessible subproof"];
@@ -38,7 +38,7 @@ function referToLine(
 // the wrapper
 function validateProofLineWithErrors(
 	line: ProofLine,
-	precedingProof: Proof
+	precedingProof: Proof,
 ): [true, string?] {
 	// very weird error that occurs sometimes when deleting an invalid line
 	if (line === undefined) throw [false, "line is malformed"];
@@ -49,7 +49,7 @@ function validateProofLineWithErrors(
 
 	if (type === "premise") {
 		const precedingNonPremise = precedingProof.find(
-			({ reason }) => reason[0] !== "premise"
+			({ reason }) => reason[0] !== "premise",
 		);
 		if (precedingNonPremise !== undefined)
 			throw [false, "premises must only appear at the start of a proof"];
@@ -60,7 +60,7 @@ function validateProofLineWithErrors(
 	if (type === "assumption") {
 		const precedingLineOfSameSubproof = precedingProof.find(
 			({ subproofIndex }) =>
-				arraysEqual(line.subproofIndex, subproofIndex)
+				arraysEqual(line.subproofIndex, subproofIndex),
 		);
 		if (precedingLineOfSameSubproof !== undefined)
 			throw [false, "subproofs must start with exactly one assumption"];
@@ -102,12 +102,12 @@ function validateProofLineWithErrors(
 		const [firstStart, firstEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 		const [secondStart, secondEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[3]
+			line.reason[3],
 		);
 
 		if (!equal(firstEnd.sentence, secondEnd.sentence))
@@ -146,7 +146,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		const sentencesEqual =
@@ -194,7 +194,7 @@ function validateProofLineWithErrors(
 		const [start, end] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[1]
+			line.reason[1],
 		);
 
 		if (!equal(line.sentence, imp(start.sentence, end.sentence)))
@@ -211,7 +211,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		let firstImplication = true;
@@ -224,7 +224,7 @@ function validateProofLineWithErrors(
 		// abstract logic to a helper function so it can be retried
 		function validateImplicationElimination(
 			firstImplication: boolean,
-			tryAgain = true
+			tryAgain = true,
 		): string | null {
 			// little ts jank for a small amount of type safety later
 			const implicationLine: ProofLine & {
@@ -274,12 +274,12 @@ function validateProofLineWithErrors(
 		const [firstStart, firstEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[1]
+			line.reason[1],
 		);
 		const [secondStart, secondEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		if (
@@ -308,7 +308,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		let firstBiImplication = true;
@@ -320,7 +320,7 @@ function validateProofLineWithErrors(
 
 		function validateBiImplicationElimination(
 			firstBiImplication: boolean,
-			tryAgain = true
+			tryAgain = true,
 		): string | null {
 			const biImplicationLine: ProofLine & {
 				sentence: {
@@ -354,7 +354,7 @@ function validateProofLineWithErrors(
 			)
 				return validateBiImplicationElimination(
 					!firstBiImplication,
-					false
+					false,
 				);
 
 			return failureReason;
@@ -377,7 +377,7 @@ function validateProofLineWithErrors(
 		const [start, end] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[1]
+			line.reason[1],
 		);
 
 		if (end.sentence.type !== "contradiction")
@@ -399,7 +399,7 @@ function validateProofLineWithErrors(
 		const [start, end] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[1]
+			line.reason[1],
 		);
 
 		if (start.sentence.type !== "negation")
@@ -431,7 +431,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		let firstNegation = true;
@@ -443,7 +443,7 @@ function validateProofLineWithErrors(
 
 		function validateNegationElimination(
 			firstNegation: boolean,
-			tryAgain = true
+			tryAgain = true,
 		): string | null {
 			const negationLine: ProofLine & {
 				sentence: {
@@ -503,7 +503,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		let firstDisjunction = true;
@@ -556,7 +556,7 @@ function validateProofLineWithErrors(
 		const secondReferent = referToLine(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		let firstImplication = true;
@@ -612,12 +612,12 @@ function validateProofLineWithErrors(
 		const [firstStart, firstEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[1]
+			line.reason[1],
 		);
 		const [secondStart, secondEnd] = referToSubproof(
 			line,
 			precedingProof,
-			line.reason[2]
+			line.reason[2],
 		);
 
 		if (!equal(firstEnd.sentence, secondEnd.sentence))
@@ -699,12 +699,12 @@ function validateProofLineWithErrors(
 // valid failure states
 export function validateProofLine(
 	line: ProofLine,
-	precedingProof: Proof
+	precedingProof: Proof,
 ): [boolean, string] {
 	try {
 		const [valid, reason] = validateProofLineWithErrors(
 			line,
-			precedingProof
+			precedingProof,
 		);
 		return [valid, reason || "this line is valid"];
 	} catch (e: unknown) {
@@ -723,7 +723,7 @@ export function validateProofLine(
 
 export function validateIncompleteProofLine(
 	line: IncompleteProofLine,
-	precedingProof: Proof
+	precedingProof: Proof,
 ): [boolean, string] {
 	if (typeof line.reason === "string")
 		return [false, "the reason for this line was not able to be parsed"];

@@ -12,7 +12,7 @@ import { logic } from "../language";
 import { parseProof } from "../proof/parseProof";
 import { ProofComponent } from "./ProofComponent";
 
-export function InteractiveProofWriter(props: { initial?: string }) {
+export function InteractiveProofValidator(props: { initial?: string }) {
 	const editorClasses =
 		"col-start-1 row-start-1 rounded border overflow-hidden";
 

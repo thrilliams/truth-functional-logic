@@ -9,6 +9,10 @@
 		"build:language": "bunx @lezer/generator ./src/lib/language/logic.grammar -o ./src/lib/language/logic.ts --typeScript",
 		"preview": "vite preview"
 	},
+	"exports": {
+		".": "./index.html",
+		"./widgets.tsx": "./src/widgets.tsx"
+	},
 	"dependencies": {
 		"@codemirror/language": "^6.12.4",
 		"@codemirror/state": "^6.7.5",
