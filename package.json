@@ -10,7 +10,7 @@
 		"preview": "vite preview"
 	},
 	"exports": {
-		"./widget.tsx": "./src/widget.tsx"
+		"./widget": "./src/widget.tsx"
 	},
 	"dependencies": {
 		"@codemirror/language": "^6.12.4",
