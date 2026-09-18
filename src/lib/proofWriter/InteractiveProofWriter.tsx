@@ -35,7 +35,7 @@ export function InteractiveProofWriter(props: { initial?: string }) {
 	const proof = createMemo(() => parseProof(input()));
 
 	return (
-		<div class="col-span-3 row-span-2 grid grid-cols-2 relative">
+		<div class="col-span-3 row-span-2 grid grid-cols-2 gap-4 relative">
 			<div
 				ref={ref}
 				class={clsx(

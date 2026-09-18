@@ -125,7 +125,7 @@ export function ProofComponent(props: ProofComponentProps) {
 	};
 
 	return (
-		<div class="py-1 px-4 border rounded m-4 row-start-1">
+		<div class="py-1 px-4 border rounded row-start-1">
 			<div class="grid grid-cols-[min-content_1fr_min-content_min-content] gap-x-1 h-min">
 				{lines()}
 			</div>
