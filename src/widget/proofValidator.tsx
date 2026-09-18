@@ -1,9 +1,5 @@
 import { MountableElement, render } from "solid-js/web";
-import { InteractiveTruthTable } from "./lib/truthTable/InteractiveTruthTable";
-import { InteractiveProofValidator } from "./lib/proofValidator/InteractiveProofValidator";
-
-export const truthTable = (element: MountableElement) =>
-	render(() => <InteractiveTruthTable initial="(A | B) <> C" />, element);
+import { InteractiveProofValidator } from "../lib/proofValidator/InteractiveProofValidator";
 
 export const proofValidator = (element: MountableElement) =>
 	render(
