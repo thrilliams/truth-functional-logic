@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { basicSetup } from "codemirror";
 import { createMemo } from "solid-js";
-import { Mode } from "../../App";
 import { createPersistentSignal } from "../createPersistentSignal";
 import { logic } from "../language";
 import { parseProof } from "../proof/parseProof";
@@ -13,7 +12,7 @@ export function InteractiveProofValidator(props: { initial?: string }) {
 		"col-start-1 row-start-1 rounded border overflow-hidden";
 
 	const [input, setInput] = createPersistentSignal(
-		Mode.Proof,
+		"proof",
 		props?.initial || "",
 	);
 

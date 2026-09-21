@@ -2,23 +2,24 @@ import { Accessor, createSignal, Setter } from "solid-js";
 
 const PREFIX = "ae-logic-";
 
-export function createPersistentSignal(
+export function createPersistentSignal<T extends string>(
 	path: string,
-	defaultValue: string,
-): [Accessor<string>, Setter<string>] {
+	defaultValue: T,
+): [Accessor<T>, Setter<T>] {
 	const key = PREFIX + path;
 
-	const [accessor, setter] = createSignal(
-		() => localStorage.getItem(key) || defaultValue,
+	const [accessor, setter] = createSignal<T>(
+		() => (localStorage.getItem(key) as T) || defaultValue,
 	);
 
-	const persistentSetter: Setter<string> = (value) => {
+	const persistentSetter = ((value) => {
 		if (value === undefined) return localStorage.removeItem(key);
-		const newValue =
-			typeof value === "function" ? value(accessor()) : value;
+		const newValue = (
+			typeof value === "function" ? value(accessor()) : value
+		) as T;
 		localStorage.setItem(key, newValue);
 		setter(() => newValue);
-	};
+	}) as Setter<T>;
 
 	return [accessor, persistentSetter];
 }

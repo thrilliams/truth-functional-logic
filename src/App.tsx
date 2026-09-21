@@ -2,19 +2,14 @@ import { createPersistentSignal } from "./lib/createPersistentSignal";
 import { InteractiveProofValidator } from "./lib/proofValidator/InteractiveProofValidator";
 import { InteractiveTruthTable } from "./lib/truthTable/InteractiveTruthTable";
 
-export enum Mode {
-	Proof = "proof",
-	TruthTable = "truth_table",
-}
+export type Mode = "proof" | "truth_table";
 
-function stringifyMode(mode: Mode) {
-	return mode === Mode.Proof ? "writing proofs" : "evaluating sentences";
-}
+const stringifyMode = (mode: Mode) =>
+	mode === "proof" ? "writing proofs" : "evaluating sentences";
 
 export function App() {
-	const [mode, setMode] = createPersistentSignal<Mode>("mode", Mode.Proof);
-	const nextMode = () =>
-		mode() === Mode.Proof ? Mode.TruthTable : Mode.Proof;
+	const [mode, setMode] = createPersistentSignal<Mode>("mode", "proof");
+	const nextMode = () => (mode() === "proof" ? "truth_table" : "proof");
 
 	return (
 		<div
@@ -24,7 +19,7 @@ export function App() {
 				"grid-template-rows": "max-content auto max-content",
 			}}
 		>
-			{mode() === Mode.Proof ? (
+			{mode() === "proof" ? (
 				<InteractiveProofValidator />
 			) : (
 				<InteractiveTruthTable />

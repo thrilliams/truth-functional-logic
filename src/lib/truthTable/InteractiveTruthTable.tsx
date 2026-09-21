@@ -1,5 +1,4 @@
 import { createMemo, createSignal, Match, Switch } from "solid-js";
-import { Mode } from "../../App";
 import { createPersistentSignal } from "../createPersistentSignal";
 import { parseSentence } from "../logic/parseSentence";
 import { TruthTable } from "./TruthTable";
@@ -8,7 +7,7 @@ export function InteractiveTruthTable(props: { initial?: string }) {
 	const labelClasses = "block text-right text-xs italic";
 
 	const [input, setInput] = createPersistentSignal<string>(
-		Mode.TruthTable,
+		"truth_table",
 		props?.initial || "",
 	);
 
